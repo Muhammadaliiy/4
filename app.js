@@ -1,10 +1,208 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const from = document.querySelector("form");
-let users = [];
-function reducerUsers(users) {
-    users.forEach((item.User), {
-        const: { id, name, age } = item
-    });
+class TodoApp {
+    todos = [];
+    currentFilter = 'all';
+    todoInput;
+    todoList;
+    filterButtons;
+    todoCount;
+    clearCompleted;
+    constructor() {
+        this.init();
+    }
+    init() {
+        this.loadFromStorage();
+        this.setupDOMElements();
+        this.setupEventListeners();
+        this.render();
+    }
+    setupDOMElements() {
+        this.todoInput = document.getElementById('todo-input');
+        this.todoList = document.getElementById('todo-list');
+        this.filterButtons = document.querySelectorAll('.filter-btn');
+        this.todoCount = document.getElementById('todo-count');
+        this.clearCompleted = document.getElementById('clear-completed');
+    }
+    setupEventListeners() {
+        // Add new todo
+        this.todoInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && this.todoInput.value.trim()) {
+                this.addTodo(this.todoInput.value.trim());
+                this.todoInput.value = '';
+            }
+        });
+        // Filter buttons
+        this.filterButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const filter = btn.dataset.filter;
+                this.setFilter(filter);
+            });
+        });
+        // Clear completed
+        this.clearCompleted.addEventListener('click', () => {
+            this.clearCompletedTodos();
+        });
+    }
+    addTodo(title) {
+        const todo = {
+            id: this.generateId(),
+            title,
+            completed: false,
+            createdAt: new Date(),
+            priority: 'medium'
+        };
+        this.todos.unshift(todo);
+        this.saveToStorage();
+        this.render();
+    }
+    toggleTodo(id) {
+        const todo = this.todos.find(t => t.id === id);
+        if (todo) {
+            todo.completed = !todo.completed;
+            this.saveToStorage();
+            this.render();
+        }
+    }
+    deleteTodo(id) {
+        this.todos = this.todos.filter(t => t.id !== id);
+        this.saveToStorage();
+        this.render();
+    }
+    editTodo(id, newTitle) {
+        const todo = this.todos.find(t => t.id === id);
+        if (todo && newTitle.trim()) {
+            todo.title = newTitle.trim();
+            this.saveToStorage();
+            this.render();
+        }
+    }
+    setFilter(filter) {
+        this.currentFilter = filter;
+        this.updateFilterButtons();
+        this.render();
+    }
+    updateFilterButtons() {
+        this.filterButtons.forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.filter === this.currentFilter);
+        });
+    }
+    getFilteredTodos() {
+        switch (this.currentFilter) {
+            case 'active':
+                return this.todos.filter(t => !t.completed);
+            case 'completed':
+                return this.todos.filter(t => t.completed);
+            default:
+                return this.todos;
+        }
+    }
+    clearCompletedTodos() {
+        this.todos = this.todos.filter(t => !t.completed);
+        this.saveToStorage();
+        this.render();
+    }
+    render() {
+        this.renderTodos();
+        this.updateTodoCount();
+        this.updateFilterButtons();
+        this.updateEmptyState();
+    }
+    renderTodos() {
+        const filteredTodos = this.getFilteredTodos();
+        this.todoList.innerHTML = filteredTodos.map(todo => `
+            <div class="todo-item ${todo.completed ? 'completed' : ''}" data-id="${todo.id}">
+                <div class="todo-checkbox">
+                    <input type="checkbox" ${todo.completed ? 'checked' : ''} 
+                           onchange="todoApp.toggleTodoPublic('${todo.id}')">
+                    <span class="checkmark"></span>
+                </div>
+                <div class="todo-content">
+                    <span class="todo-title" ondblclick="todoApp.startEdit('${todo.id}')">${todo.title}</span>
+                    <input type="text" class="edit-input" value="${todo.title}" 
+                           onblur="todoApp.finishEdit('${todo.id}', this.value)"
+                           onkeypress="if(event.key==='Enter') this.blur()">
+                </div>
+                <div class="todo-actions">
+                    <button class="priority-btn priority-${todo.priority}" 
+                            onclick="todoApp.cyclePriorityPublic('${todo.id}')" title="Priority: ${todo.priority}">
+                        !
+                    </button>
+                    <button class="delete-btn" onclick="todoApp.deleteTodoPublic('${todo.id}')" title="Delete">
+                        ×
+                    </button>
+                </div>
+            </div>
+        `).join('');
+    }
+    updateTodoCount() {
+        const activeTodos = this.todos.filter(t => !t.completed).length;
+        this.todoCount.textContent = `${activeTodos} item${activeTodos !== 1 ? 's' : ''} left`;
+    }
+    updateEmptyState() {
+        const emptyState = document.getElementById('empty-state');
+        const filteredTodos = this.getFilteredTodos();
+        if (filteredTodos.length === 0) {
+            emptyState.style.display = 'flex';
+        }
+        else {
+            emptyState.style.display = 'none';
+        }
+    }
+    cyclePriority(id) {
+        const todo = this.todos.find(t => t.id === id);
+        if (todo) {
+            const priorities = ['low', 'medium', 'high'];
+            const currentIndex = priorities.indexOf(todo.priority);
+            const nextIndex = (currentIndex + 1) % priorities.length;
+            todo.priority = priorities[nextIndex];
+            this.saveToStorage();
+            this.render();
+        }
+    }
+    startEdit(id) {
+        const todoItem = document.querySelector(`[data-id="${id}"]`);
+        if (todoItem) {
+            todoItem.classList.add('editing');
+            const input = todoItem.querySelector('.edit-input');
+            input.focus();
+            input.select();
+        }
+    }
+    finishEdit(id, newTitle) {
+        const todoItem = document.querySelector(`[data-id="${id}"]`);
+        if (todoItem) {
+            todoItem.classList.remove('editing');
+            if (newTitle.trim()) {
+                this.editTodo(id, newTitle);
+            }
+        }
+    }
+    generateId() {
+        return Date.now().toString(36) + Math.random().toString(36).substr(2);
+    }
+    saveToStorage() {
+        localStorage.setItem('todos', JSON.stringify(this.todos));
+    }
+    loadFromStorage() {
+        const stored = localStorage.getItem('todos');
+        if (stored) {
+            this.todos = JSON.parse(stored).map((todo) => ({
+                ...todo,
+                createdAt: new Date(todo.createdAt)
+            }));
+        }
+    }
+    // Public methods for global access
+    toggleTodoPublic = (id) => this.toggleTodo(id);
+    deleteTodoPublic = (id) => this.deleteTodo(id);
+    cyclePriorityPublic = (id) => this.cyclePriority(id);
 }
+// Initialize the app
+let todoApp;
+document.addEventListener('DOMContentLoaded', () => {
+    todoApp = new TodoApp();
+    // Make todoApp globally accessible for inline event handlers
+    window.todoApp = todoApp;
+});
 //# sourceMappingURL=app.js.map
