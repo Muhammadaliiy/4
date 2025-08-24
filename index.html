@@ -3,11 +3,75 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><Title>
-</Title></title>
+    <title>Todo App - TypeScript</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
   </head>
   <body>
-    <input type="text" id="myInput" />
-    <script src="./app.ts"></script>
+    <div class="app-container">
+      <header class="app-header">
+        <h1 class="app-title">Todo App</h1>
+        <p class="app-subtitle">Stay organized, stay productive</p>
+      </header>
+
+      <main class="todo-container">
+        <div class="input-section">
+          <div class="input-wrapper">
+            <input 
+              type="text" 
+              id="todo-input" 
+              class="todo-input"
+              placeholder="What needs to be done?"
+              autocomplete="off"
+            />
+            <button class="add-btn" onclick="document.getElementById('todo-input').dispatchEvent(new KeyboardEvent('keypress', {key: 'Enter'}))">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="filters-section">
+          <div class="filter-buttons">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="active">Active</button>
+            <button class="filter-btn" data-filter="completed">Completed</button>
+          </div>
+          <div class="todo-stats">
+            <span id="todo-count">0 items left</span>
+            <button id="clear-completed" class="clear-btn">Clear Completed</button>
+          </div>
+        </div>
+
+        <div class="todo-list-container">
+          <div id="todo-list" class="todo-list">
+            <!-- Todos will be rendered here -->
+          </div>
+          <div class="empty-state" id="empty-state">
+            <div class="empty-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+                <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <h3>No todos yet</h3>
+            <p>Add a new task to get started!</p>
+          </div>
+        </div>
+      </main>
+
+      <footer class="app-footer">
+        <p>Built with TypeScript • Double-click to edit • Priority levels available</p>
+        <div class="priority-legend">
+          <span class="priority-indicator priority-low">Low</span>
+          <span class="priority-indicator priority-medium">Medium</span>
+          <span class="priority-indicator priority-high">High</span>
+        </div>
+      </footer>
+    </div>
+
+    <script src="./app.js"></script>
   </body>
 </html>
