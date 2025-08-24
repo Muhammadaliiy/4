@@ -21,7 +21,7 @@ class TodoApp {
         this.todoInput = document.getElementById('todo-input');
         this.todoList = document.getElementById('todo-list');
         this.filterButtons = document.querySelectorAll('.filter-btn');
-        this.todoCount = document.getElementById('todo-count');
+        this.todoCount = document.getElementById('todo-count-number');
         this.clearCompleted = document.getElementById('clear-completed');
     }
     setupEventListeners() {
@@ -34,7 +34,8 @@ class TodoApp {
         });
         // Filter buttons
         this.filterButtons.forEach(btn => {
-            btn.addEventListener('click', () => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
                 const filter = btn.dataset.filter;
                 this.setFilter(filter);
             });
@@ -49,8 +50,7 @@ class TodoApp {
             id: this.generateId(),
             title,
             completed: false,
-            createdAt: new Date(),
-            priority: 'medium'
+            createdAt: new Date()
         };
         this.todos.unshift(todo);
         this.saveToStorage();
@@ -84,7 +84,7 @@ class TodoApp {
     }
     updateFilterButtons() {
         this.filterButtons.forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.filter === this.currentFilter);
+            btn.classList.toggle('selected', btn.dataset.filter === this.currentFilter);
         });
     }
     getFilteredTodos() {
@@ -111,60 +111,51 @@ class TodoApp {
     renderTodos() {
         const filteredTodos = this.getFilteredTodos();
         this.todoList.innerHTML = filteredTodos.map(todo => `
-            <div class="todo-item ${todo.completed ? 'completed' : ''}" data-id="${todo.id}">
-                <div class="todo-checkbox">
-                    <input type="checkbox" ${todo.completed ? 'checked' : ''} 
+            <li class="${todo.completed ? 'completed' : ''}" data-id="${todo.id}">
+                <div class="view">
+                    <input class="toggle" type="checkbox" ${todo.completed ? 'checked' : ''} 
                            onchange="todoApp.toggleTodoPublic('${todo.id}')">
-                    <span class="checkmark"></span>
+                    <label ondblclick="todoApp.startEdit('${todo.id}')">${todo.title}</label>
+                    <button class="destroy" onclick="todoApp.deleteTodoPublic('${todo.id}')"></button>
                 </div>
-                <div class="todo-content">
-                    <span class="todo-title" ondblclick="todoApp.startEdit('${todo.id}')">${todo.title}</span>
-                    <input type="text" class="edit-input" value="${todo.title}" 
-                           onblur="todoApp.finishEdit('${todo.id}', this.value)"
-                           onkeypress="if(event.key==='Enter') this.blur()">
-                </div>
-                <div class="todo-actions">
-                    <button class="priority-btn priority-${todo.priority}" 
-                            onclick="todoApp.cyclePriorityPublic('${todo.id}')" title="Priority: ${todo.priority}">
-                        !
-                    </button>
-                    <button class="delete-btn" onclick="todoApp.deleteTodoPublic('${todo.id}')" title="Delete">
-                        ×
-                    </button>
-                </div>
-            </div>
+                <input class="edit" value="${todo.title}" 
+                       onblur="todoApp.finishEdit('${todo.id}', this.value)"
+                       onkeypress="if(event.key==='Enter') this.blur(); if(event.key==='Escape') todoApp.cancelEdit('${todo.id}')">
+            </li>
         `).join('');
     }
     updateTodoCount() {
         const activeTodos = this.todos.filter(t => !t.completed).length;
-        this.todoCount.textContent = `${activeTodos} item${activeTodos !== 1 ? 's' : ''} left`;
+        this.todoCount.textContent = activeTodos.toString();
+        const countSpan = this.todoCount.parentElement;
+        if (countSpan) {
+            const itemText = activeTodos === 1 ? 'item left' : 'items left';
+            countSpan.innerHTML = `<strong>${activeTodos}</strong> ${itemText}`;
+        }
     }
     updateEmptyState() {
         const emptyState = document.getElementById('empty-state');
-        const filteredTodos = this.getFilteredTodos();
-        if (filteredTodos.length === 0) {
-            emptyState.style.display = 'flex';
+        const footer = document.getElementById('footer');
+        const mainSection = document.querySelector('.main-section');
+        if (this.todos.length === 0) {
+            emptyState.style.display = 'block';
+            footer.style.display = 'none';
+            mainSection.style.display = 'none';
         }
         else {
             emptyState.style.display = 'none';
+            footer.style.display = 'flex';
+            mainSection.style.display = 'block';
         }
-    }
-    cyclePriority(id) {
-        const todo = this.todos.find(t => t.id === id);
-        if (todo) {
-            const priorities = ['low', 'medium', 'high'];
-            const currentIndex = priorities.indexOf(todo.priority);
-            const nextIndex = (currentIndex + 1) % priorities.length;
-            todo.priority = priorities[nextIndex];
-            this.saveToStorage();
-            this.render();
-        }
+        // Update clear completed button visibility
+        const hasCompleted = this.todos.some(t => t.completed);
+        this.clearCompleted.style.display = hasCompleted ? 'block' : 'none';
     }
     startEdit(id) {
         const todoItem = document.querySelector(`[data-id="${id}"]`);
         if (todoItem) {
             todoItem.classList.add('editing');
-            const input = todoItem.querySelector('.edit-input');
+            const input = todoItem.querySelector('.edit');
             input.focus();
             input.select();
         }
@@ -176,6 +167,15 @@ class TodoApp {
             if (newTitle.trim()) {
                 this.editTodo(id, newTitle);
             }
+            else {
+                this.deleteTodo(id);
+            }
+        }
+    }
+    cancelEdit(id) {
+        const todoItem = document.querySelector(`[data-id="${id}"]`);
+        if (todoItem) {
+            todoItem.classList.remove('editing');
         }
     }
     generateId() {
@@ -196,7 +196,6 @@ class TodoApp {
     // Public methods for global access
     toggleTodoPublic = (id) => this.toggleTodo(id);
     deleteTodoPublic = (id) => this.deleteTodo(id);
-    cyclePriorityPublic = (id) => this.cyclePriority(id);
 }
 // Initialize the app
 let todoApp;

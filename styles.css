@@ -1,569 +1,415 @@
-/* Reset and Base Styles */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+/* TodoMVC-style CSS matching typical Figma designs */
+
+html,
+body {
+	margin: 0;
+	padding: 0;
 }
 
-:root {
-  /* Colors */
-  --primary-color: #6366f1;
-  --primary-dark: #4f46e5;
-  --primary-light: #818cf8;
-  
-  --success-color: #10b981;
-  --warning-color: #f59e0b;
-  --error-color: #ef4444;
-  
-  --text-primary: #1f2937;
-  --text-secondary: #6b7280;
-  --text-muted: #9ca3af;
-  
-  --bg-primary: #ffffff;
-  --bg-secondary: #f9fafb;
-  --bg-tertiary: #f3f4f6;
-  
-  --border-color: #e5e7eb;
-  --border-hover: #d1d5db;
-  
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  
-  /* Priority Colors */
-  --priority-low: #10b981;
-  --priority-medium: #f59e0b;
-  --priority-high: #ef4444;
-  
-  /* Spacing */
-  --spacing-xs: 0.25rem;
-  --spacing-sm: 0.5rem;
-  --spacing-md: 1rem;
-  --spacing-lg: 1.5rem;
-  --spacing-xl: 2rem;
-  --spacing-2xl: 3rem;
-  
-  /* Border Radius */
-  --radius-sm: 0.375rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 0.75rem;
-  --radius-xl: 1rem;
-  
-  /* Transitions */
-  --transition-fast: 150ms ease-in-out;
-  --transition-normal: 250ms ease-in-out;
-  --transition-slow: 300ms ease-in-out;
+button {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	background: none;
+	font-size: 100%;
+	vertical-align: baseline;
+	font-family: inherit;
+	font-weight: inherit;
+	color: inherit;
+	-webkit-appearance: none;
+	appearance: none;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  min-height: 100vh;
-  color: var(--text-primary);
-  line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+	font: 14px 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	line-height: 1.4em;
+	background: #f5f5f5;
+	color: #111111;
+	min-width: 230px;
+	max-width: 550px;
+	margin: 0 auto;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	font-weight: 300;
 }
 
-/* App Container */
-.app-container {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: var(--spacing-lg);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+:focus {
+	outline: 0;
 }
 
-/* Header */
-.app-header {
-  text-align: center;
-  margin-bottom: var(--spacing-2xl);
-  color: white;
+.hidden {
+	display: none;
 }
 
-.app-title {
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin-bottom: var(--spacing-xs);
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.container {
+	margin: 130px 0 40px 0;
+	position: relative;
 }
 
-.app-subtitle {
-  font-size: 1.1rem;
-  font-weight: 300;
-  opacity: 0.9;
+.todo-app {
+	background: #fff;
+	margin: 130px 0 40px 0;
+	position: relative;
+	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2),
+	            0 25px 50px 0 rgba(0, 0, 0, 0.1);
 }
 
-/* Todo Container */
-.todo-container {
-  background: var(--bg-primary);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-xl);
-  padding: var(--spacing-xl);
-  flex: 1;
-  display: flex;
-  flex-direction: column;
+.todo-app input::-webkit-input-placeholder {
+	font-style: italic;
+	font-weight: 400;
+	color: rgba(0, 0, 0, 0.4);
 }
 
-/* Input Section */
-.input-section {
-  margin-bottom: var(--spacing-lg);
+.todo-app input::-moz-placeholder {
+	font-style: italic;
+	font-weight: 400;
+	color: rgba(0, 0, 0, 0.4);
 }
 
-.input-wrapper {
-  display: flex;
-  gap: var(--spacing-sm);
-  align-items: center;
+.todo-app input::input-placeholder {
+	font-style: italic;
+	font-weight: 400;
+	color: rgba(0, 0, 0, 0.4);
 }
 
-.todo-input {
-  flex: 1;
-  padding: var(--spacing-md);
-  border: 2px solid var(--border-color);
-  border-radius: var(--radius-lg);
-  font-size: 1rem;
-  transition: all var(--transition-normal);
-  outline: none;
+.header {
+	padding-top: 15px;
+	border-radius: 2px 2px 0 0;
 }
 
-.todo-input:focus {
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+.title {
+	position: absolute;
+	top: -140px;
+	width: 100%;
+	font-size: 80px;
+	font-weight: 200;
+	text-align: center;
+	color: #b83f45;
+	-webkit-text-rendering: optimizeLegibility;
+	-moz-text-rendering: optimizeLegibility;
+	text-rendering: optimizeLegibility;
+	margin: 0;
 }
 
-.add-btn {
-  padding: var(--spacing-md);
-  background: var(--primary-color);
-  border: none;
-  border-radius: var(--radius-lg);
-  color: white;
-  cursor: pointer;
-  transition: all var(--transition-fast);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.new-todo,
+.edit {
+	position: relative;
+	margin: 0;
+	width: 100%;
+	font-size: 24px;
+	font-family: inherit;
+	font-weight: inherit;
+	line-height: 1.4em;
+	color: inherit;
+	padding: 6px;
+	border: 1px solid #999;
+	box-shadow: inset 0 -1px 5px 0 rgba(0, 0, 0, 0.2);
+	box-sizing: border-box;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
-.add-btn:hover {
-  background: var(--primary-dark);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
+.new-todo {
+	padding: 16px 16px 16px 60px;
+	height: 65px;
+	border: none;
+	background: rgba(0, 0, 0, 0.003);
+	box-shadow: inset 0 -2px 1px rgba(0,0,0,0.03);
 }
 
-/* Filters Section */
-.filters-section {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: var(--spacing-lg);
-  padding-bottom: var(--spacing-md);
-  border-bottom: 1px solid var(--border-color);
-  flex-wrap: wrap;
-  gap: var(--spacing-md);
+.main-section {
+	position: relative;
+	z-index: 2;
+	border-top: 1px solid #e6e6e6;
 }
 
-.filter-buttons {
-  display: flex;
-  gap: var(--spacing-xs);
+.toggle-all {
+	width: 1px;
+	height: 1px;
+	border: none; /* Mobile Safari */
+	opacity: 0;
+	position: absolute;
+	right: 100%;
+	bottom: 100%;
 }
 
-.filter-btn {
-  padding: var(--spacing-sm) var(--spacing-md);
-  border: 1px solid var(--border-color);
-  background: var(--bg-secondary);
-  border-radius: var(--radius-md);
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--text-secondary);
-  cursor: pointer;
-  transition: all var(--transition-fast);
+.toggle-all + label {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 45px;
+	height: 65px;
+	font-size: 0;
+	position: absolute;
+	top: -65px;
+	left: -0;
 }
 
-.filter-btn:hover {
-  background: var(--bg-tertiary);
-  border-color: var(--border-hover);
+.toggle-all + label:before {
+	content: '❯';
+	display: inline-block;
+	font-size: 22px;
+	color: #949494;
+	padding: 10px 27px 10px 27px;
+	-webkit-transform: rotate(90deg);
+	transform: rotate(90deg);
 }
 
-.filter-btn.active {
-  background: var(--primary-color);
-  border-color: var(--primary-color);
-  color: white;
-}
-
-.todo-stats {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-md);
-  font-size: 0.875rem;
-  color: var(--text-secondary);
-}
-
-.clear-btn {
-  padding: var(--spacing-sm) var(--spacing-md);
-  background: transparent;
-  border: 1px solid var(--error-color);
-  color: var(--error-color);
-  border-radius: var(--radius-md);
-  font-size: 0.875rem;
-  cursor: pointer;
-  transition: all var(--transition-fast);
-}
-
-.clear-btn:hover {
-  background: var(--error-color);
-  color: white;
-}
-
-/* Todo List */
-.todo-list-container {
-  flex: 1;
-  position: relative;
+.toggle-all:checked + label:before {
+	color: #484848;
 }
 
 .todo-list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-sm);
-  max-height: 60vh;
-  overflow-y: auto;
-  padding-right: var(--spacing-xs);
+	margin: 0;
+	padding: 0;
+	list-style: none;
 }
 
-.todo-list::-webkit-scrollbar {
-  width: 6px;
+.todo-list li {
+	position: relative;
+	font-size: 24px;
+	border-bottom: 1px solid #ededed;
 }
 
-.todo-list::-webkit-scrollbar-track {
-  background: var(--bg-tertiary);
-  border-radius: var(--radius-sm);
+.todo-list li:last-child {
+	border-bottom: none;
 }
 
-.todo-list::-webkit-scrollbar-thumb {
-  background: var(--border-hover);
-  border-radius: var(--radius-sm);
+.todo-list li.editing {
+	border-bottom: none;
+	padding: 0;
 }
 
-.todo-list::-webkit-scrollbar-thumb:hover {
-  background: var(--text-muted);
+.todo-list li.editing .edit {
+	display: block;
+	width: calc(100% - 43px);
+	padding: 12px 16px;
+	margin: 0 0 0 43px;
 }
 
-/* Todo Item */
-.todo-item {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-md);
-  padding: var(--spacing-md);
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
-  transition: all var(--transition-normal);
-  position: relative;
+.todo-list li.editing .view {
+	display: none;
 }
 
-.todo-item:hover {
-  border-color: var(--border-hover);
-  box-shadow: var(--shadow-sm);
-  transform: translateY(-1px);
+.todo-list li .toggle {
+	text-align: center;
+	width: 40px;
+	/* auto, since non-WebKit browsers doesn't support input styling */
+	height: auto;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	margin: auto 0;
+	border: none; /* Mobile Safari */
+	-webkit-appearance: none;
+	appearance: none;
 }
 
-.todo-item.completed {
-  opacity: 0.7;
-  background: var(--bg-tertiary);
+.todo-list li .toggle {
+	opacity: 0;
 }
 
-.todo-item.editing .todo-title {
-  display: none;
+.todo-list li .toggle + label {
+	/*
+		Firefox requires `#` to be escaped - https://bugzilla.mozilla.org/show_bug.cgi?id=922433
+		IE and Edge requires *everything* to be escaped to render, so we do that instead of just the `#` - https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/7157459/
+	*/
+	background-image: url('data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%22-10%20-18%20100%20135%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22none%22%20stroke%3D%22%23949494%22%20stroke-width%3D%223%22/%3E%3C/svg%3E');
+	background-repeat: no-repeat;
+	background-position: center left;
 }
 
-.todo-item:not(.editing) .edit-input {
-  display: none;
+.todo-list li .toggle:checked + label {
+	background-image: url('data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%22-10%20-18%20100%20135%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22none%22%20stroke%3D%22%2359A193%22%20stroke-width%3D%223%22/%3E%3Cpath%20fill%3D%22%233EA390%22%20d%3D%22M72%2025L42%2071%2027%2056l-4%204%2020%2020%2034-52z%22/%3E%3C/svg%3E');
 }
 
-/* Checkbox */
-.todo-checkbox {
-  position: relative;
-  display: flex;
-  align-items: center;
+.todo-list li label {
+	word-break: break-all;
+	padding: 15px 15px 15px 60px;
+	display: block;
+	line-height: 1.2;
+	transition: color 0.4s;
+	font-weight: 400;
+	color: #484848;
 }
 
-.todo-checkbox input[type="checkbox"] {
-  appearance: none;
-  width: 20px;
-  height: 20px;
-  border: 2px solid var(--border-color);
-  border-radius: var(--radius-sm);
-  position: relative;
-  cursor: pointer;
-  transition: all var(--transition-fast);
+.todo-list li.completed label {
+	color: #949494;
+	text-decoration: line-through;
 }
 
-.todo-checkbox input[type="checkbox"]:checked {
-  background: var(--success-color);
-  border-color: var(--success-color);
+.todo-list li .destroy {
+	display: none;
+	position: absolute;
+	top: 0;
+	right: 10px;
+	bottom: 0;
+	width: 40px;
+	height: 40px;
+	margin: auto 0;
+	font-size: 30px;
+	color: #949494;
+	transition: color 0.2s ease-out;
 }
 
-.todo-checkbox input[type="checkbox"]:checked::after {
-  content: '✓';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: white;
-  font-size: 14px;
-  font-weight: bold;
+.todo-list li .destroy:hover,
+.todo-list li .destroy:focus {
+	color: #C18585;
 }
 
-/* Todo Content */
-.todo-content {
-  flex: 1;
-  min-width: 0;
+.todo-list li .destroy:after {
+	content: '×';
+	display: block;
+	height: 100%;
+	line-height: 1.1;
 }
 
-.todo-title {
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  word-wrap: break-word;
-  transition: color var(--transition-fast);
+.todo-list li:hover .destroy {
+	display: block;
 }
 
-.todo-item.completed .todo-title {
-  text-decoration: line-through;
-  color: var(--text-muted);
+.todo-list li .edit {
+	display: none;
 }
 
-.edit-input {
-  width: 100%;
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border: 1px solid var(--primary-color);
-  border-radius: var(--radius-sm);
-  font-size: 1rem;
-  outline: none;
-  background: white;
+.todo-list li.editing:last-child {
+	margin-bottom: -1px;
 }
 
-/* Todo Actions */
-.todo-actions {
-  display: flex;
-  gap: var(--spacing-xs);
-  align-items: center;
+.footer {
+	padding: 10px 15px;
+	height: 20px;
+	text-align: center;
+	font-size: 15px;
+	border-top: 1px solid #e6e6e6;
+	color: #777;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }
 
-.priority-btn {
-  width: 28px;
-  height: 28px;
-  border: none;
-  border-radius: var(--radius-sm);
-  font-weight: bold;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all var(--transition-fast);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.footer:before {
+	content: '';
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	height: 50px;
+	overflow: hidden;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2),
+	            0 8px 0 -3px #f6f6f6,
+	            0 9px 1px -3px rgba(0, 0, 0, 0.2),
+	            0 16px 0 -6px #f6f6f6,
+	            0 17px 2px -6px rgba(0, 0, 0, 0.2);
 }
 
-.priority-low {
-  background: var(--priority-low);
-  color: white;
+.todo-count {
+	text-align: left;
 }
 
-.priority-medium {
-  background: var(--priority-medium);
-  color: white;
+.todo-count strong {
+	font-weight: 300;
 }
 
-.priority-high {
-  background: var(--priority-high);
-  color: white;
+.filters {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	position: absolute;
+	right: 0;
+	left: 0;
+	display: flex;
+	justify-content: center;
 }
 
-.priority-btn:hover {
-  transform: scale(1.1);
-  box-shadow: var(--shadow-sm);
+.filters li {
+	display: inline;
 }
 
-.delete-btn {
-  width: 28px;
-  height: 28px;
-  border: none;
-  border-radius: var(--radius-sm);
-  background: var(--error-color);
-  color: white;
-  font-size: 18px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all var(--transition-fast);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 1;
+.filters li a {
+	color: inherit;
+	margin: 3px;
+	padding: 3px 7px;
+	text-decoration: none;
+	border: 1px solid transparent;
+	border-radius: 3px;
 }
 
-.delete-btn:hover {
-  transform: scale(1.1);
-  box-shadow: var(--shadow-sm);
+.filters li a:hover {
+	border-color: #DB7676;
 }
 
-/* Empty State */
+.filters li a.selected {
+	border-color: #CE4646;
+}
+
+.clear-completed,
+html .clear-completed:active {
+	float: right;
+	position: relative;
+	line-height: 19px;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.clear-completed:hover {
+	text-decoration: underline;
+}
+
+.info {
+	margin: 65px auto 0;
+	color: #4d4d4d;
+	font-size: 11px;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+	text-align: center;
+}
+
+.info p {
+	line-height: 1;
+}
+
+.info a {
+	color: inherit;
+	text-decoration: none;
+	font-weight: 400;
+}
+
+.info a:hover {
+	text-decoration: underline;
+}
+
+/*
+	Hack to remove background from Mobile Safari.
+	Can't use it globally since it destroys checkboxes in Firefox
+*/
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+	.toggle-all,
+	.todo-list li .toggle {
+		background: none;
+	}
+
+	.todo-list li .toggle {
+		height: 40px;
+	}
+}
+
+@media (max-width: 430px) {
+	.footer {
+		height: 50px;
+		flex-direction: column;
+		gap: 10px;
+	}
+
+	.filters {
+		position: static;
+	}
+}
+
 .empty-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: var(--spacing-2xl);
-  text-align: center;
-  color: var(--text-muted);
-  min-height: 200px;
-}
-
-.empty-icon {
-  margin-bottom: var(--spacing-lg);
-  opacity: 0.5;
-}
-
-.empty-state h3 {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-bottom: var(--spacing-sm);
-  color: var(--text-secondary);
-}
-
-.empty-state p {
-  font-size: 1rem;
-}
-
-/* Footer */
-.app-footer {
-  margin-top: var(--spacing-xl);
-  text-align: center;
-  color: white;
-  opacity: 0.8;
-  font-size: 0.875rem;
-}
-
-.priority-legend {
-  display: flex;
-  justify-content: center;
-  gap: var(--spacing-md);
-  margin-top: var(--spacing-sm);
-}
-
-.priority-indicator {
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border-radius: var(--radius-sm);
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: white;
-}
-
-.priority-indicator.priority-low {
-  background: var(--priority-low);
-}
-
-.priority-indicator.priority-medium {
-  background: var(--priority-medium);
-}
-
-.priority-indicator.priority-high {
-  background: var(--priority-high);
-}
-
-/* Responsive Design */
-@media (max-width: 640px) {
-  .app-container {
-    padding: var(--spacing-md);
-  }
-  
-  .app-title {
-    font-size: 2rem;
-  }
-  
-  .todo-container {
-    padding: var(--spacing-lg);
-  }
-  
-  .filters-section {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  
-  .filter-buttons {
-    justify-content: center;
-  }
-  
-  .todo-stats {
-    justify-content: space-between;
-  }
-  
-  .priority-legend {
-    flex-wrap: wrap;
-  }
-}
-
-/* Animations */
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.todo-item {
-  animation: slideIn var(--transition-normal);
-}
-
-/* Focus Styles */
-.todo-input:focus,
-.edit-input:focus,
-.filter-btn:focus,
-.add-btn:focus,
-.clear-btn:focus,
-.priority-btn:focus,
-.delete-btn:focus {
-  outline: 2px solid var(--primary-color);
-  outline-offset: 2px;
-}
-
-/* High Contrast Mode Support */
-@media (prefers-contrast: high) {
-  :root {
-    --border-color: #000000;
-    --text-secondary: #000000;
-  }
-}
-
-/* Reduced Motion Support */
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-
-/* Dark Mode Support */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text-primary: #f9fafb;
-    --text-secondary: #d1d5db;
-    --text-muted: #9ca3af;
-    
-    --bg-primary: #1f2937;
-    --bg-secondary: #374151;
-    --bg-tertiary: #4b5563;
-    
-    --border-color: #4b5563;
-    --border-hover: #6b7280;
-  }
-  
-  body {
-    background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
-  }
+	padding: 20px;
+	text-align: center;
+	color: #777;
+	font-style: italic;
 }
